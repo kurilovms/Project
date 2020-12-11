@@ -8,9 +8,11 @@ BUTTON_COLOR = (0, 255, 0)
 
 
 class Button:
-    def __init__(self, x, y, text):
+    def __init__(self, x=0, y=0, text='', w=0, h=0):
         self.x = x
         self.y = y
+        self.w = w
+        self.h = h
         self.text = text
         self.rect = pygame.Rect(0, 0, 0, 0)
     
@@ -27,7 +29,9 @@ class Button:
         pygame.transform.smoothscale(
                 surf, (x, y), surfscaled)
         screen = pygame.display.get_surface()
-        self.rect = pygame.Rect(self.x - 10, self.y - 10, x + 20, y + 20)
+        self.rect = pygame.Rect(self.x-10, self.y-10, x+20, y+20)
+        self.w = x + 20
+        self.h = y + 20
         pygame.draw.rect(screen, BUTTON_COLOR, self.rect, 2)
         if self.check():
             pygame.draw.rect(screen, BUTTON_COLOR, self.rect)
@@ -72,6 +76,7 @@ class InputBox:
                 surf, (x, y), surfscaled)
         screen = pygame.display.get_surface()
         self.rect = pygame.Rect(self.x - 10, self.y - 10, max(self.length, x + 20), y + 20)
+        
         pygame.draw.rect(screen, FIELD_COLOR, self.rect, 2)
         if self.active:
             pygame.draw.rect(screen, FIELD_ACTIVE_COLOR, self.rect, 2)

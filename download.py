@@ -8,6 +8,7 @@ back2 = pygame.image.load("back2.png")
 back2 = pygame.transform.scale(back2, (d, d))
 back3 = pygame.image.load("back3.png")
 back3 = pygame.transform.scale(back3, (d, d))
+dorm = pygame.image.load("dormitory.jpg")
 
 h1 = pygame.image.load("1.png")
 h1 = pygame.transform.scale(h1, (d, d))
