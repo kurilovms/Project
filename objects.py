@@ -20,9 +20,7 @@ from download import h1, h2, h3, h4, h5, h6, h7, h8, h9, h10, h11, h12, h13, h14
 
 
 class Hero():
-    """Тип данных, описывающий главного героя.
-    """
-
+    """Тип данных, описывающий главного героя."""
     def __init__(self, x=0, y=0):
         self.x = x
         self.y = y
@@ -87,12 +85,11 @@ class Hero():
         sc.blit(im, image_rect)
 
 class Moneta():
-    
     def __init__(self, x=0, y=0):
         self.x = x
         self.y = y
         self.im = h13
-        
+
     def draw(self, sc, x1, y1, width, height):
         dx = self.x - x1 + (width-1)/2
         dy = self.y - y1 + (height-1)/2
@@ -100,16 +97,15 @@ class Moneta():
             im = self.im
             image_rect = im.get_rect(topleft=(d*dx, d*dy))
             sc.blit(im, image_rect)
-        
+
     def check(self, x1, y1):
         if self.x == x1:
             if self.y == y1:
                 self.x = -1
                 self.y = -1
                 return True
-            
+
 class Rat():
-    
     def __init__(self, spdx=0, spdy=0, dx=0, dy=0, x0=0, y0=0):
         self.x = x0
         self.y = y0
@@ -121,9 +117,9 @@ class Rat():
         self.im4 = h18
         self.dx = dx
         self.dy = dy
-        self.x0= x0
-        self.y0= y0
-        
+        self.x0 = x0
+        self.y0 = y0
+
     def calculate(self):
         self.x+= self.spdx
         self.y+= self.spdy
@@ -131,26 +127,26 @@ class Rat():
            self.spdx = -self.spdx
         if self.y > self.y0 + self.dy or self.y < self.y0 -self.dy:
             self.spdy = -self.spdy
-            
+
     def drawandcheck(self, sc, x1, y1):
-        dx = self.x - x1 
+        dx = self.x - x1
         dy = self.y - y1
-        if self.spdy ==0:
-            if self.spdx >0:
+        if self.spdy == 0:
+            if self.spdx > 0:
                 im = self.im2
             else:
                 im= self.im1
-        if self.spdx ==0:
+        if self.spdx == 0:
             if self.spdy > 0:
                 im = self.im4
             else:
                 im = self.im3
         image_rect = im.get_rect(topleft=(d * dx, d * dy))
         sc.blit(im, image_rect)
-        if self.x - x1 < 11 and self.x - x1  > 9 :
-            if self.y - y1 < 8 and self.y - y1 > 6  :
+        if self.x - x1 < 11 and self.x - x1  > 9:
+            if self.y - y1 < 8 and self.y - y1 > 6:
                 return True
-            
+
 class Background():
     def draw(self, sc, pix, x, y, width, height):
         dx = (width - 1) / 2
