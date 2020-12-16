@@ -81,3 +81,25 @@ h17.set_colorkey(WHITE)
 h18 = pygame.image.load("18.png")
 h18 = pygame.transform.scale(h18, (d, d))
 h18.set_colorkey(WHITE)
+
+h19 = pygame.image.load("19.png")
+h19 = pygame.transform.scale(h19, (d, d))
+h19.set_colorkey(WHITE)
+
+h20 = pygame.image.load("20.png")
+h20 = pygame.transform.scale(h20, (d, d))
+h20.set_colorkey(WHITE)
+
+h21 = pygame.image.load("21.png")
+h21 = pygame.transform.scale(h21, (int(1.5*d), int(1.5*d)))
+h21.set_colorkey(WHITE)
+
+h22 = pygame.image.load("22.png")
+h22 = pygame.transform.scale(h22, (int(6*d), int(5*d)))
+h22.set_colorkey(WHITE)
+
+h23 = pygame.image.load("23.png")
+h23 = pygame.transform.scale(h23, (int(6*d), int(5*d)))
+h23.set_colorkey(WHITE)
+
+

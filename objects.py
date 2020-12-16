@@ -16,7 +16,7 @@ WHITE = (255, 255, 255)
 COLORS = [RED, BLUE, YELLOW, GREEN, MAGENTA, CYAN, WHITE]
 
 from download import back1, back2, back3
-from download import h1, h2, h3, h4, h5, h6, h7, h8, h9, h10, h11, h12, h13, h14, h15, h16, h17, h18
+from download import h1, h2, h3, h4, h5, h6, h7, h8, h9, h10, h11, h12, h13, h14, h15, h16, h17, h18, h19, h20, h21, h22, h23
 
 
 class Hero():
@@ -85,6 +85,7 @@ class Hero():
         sc.blit(im, image_rect)
 
 class Moneta():
+    
     def __init__(self, x=0, y=0):
         self.x = x
         self.y = y
@@ -146,7 +147,52 @@ class Rat():
         if self.x - x1 < 11 and self.x - x1  > 9:
             if self.y - y1 < 8 and self.y - y1 > 6:
                 return True
-
+            
+class Matan():
+    
+    def __init__(self, x=0, y=0):
+        self.x = x
+        self.y = y
+        self.im = h19
+        
+    def draw(self, sc, x1, y1):
+        dx = self.x - x1
+        dy = self.y - y1
+        im = self.im
+        image_rect = im.get_rect(topleft=(d * dx, d * dy))
+        sc.blit(im, image_rect)
+        
+    def check(self, x1, y1):
+        if self.x - x1 == 10:
+            if self.y - y1 == 7:
+                self.x = 300
+                self.y = 300
+                return True
+            
+class Npc():
+    
+    def __init__(self, x=0, y=0):
+        self.x = x
+        self.y = y
+        self.im = h21
+        self.im1 = h22
+        self.im2 = h23
+        
+    def draw(self, sc, x1, y1, matan):
+        dx = self.x - x1
+        dy = self.y - y1
+        im = self.im
+        image_rect = im.get_rect(topleft=(d * dx, d * dy))
+        sc.blit(im, image_rect)
+        if self.x - x1 < 13 and self.x - x1  > 7:
+            if self.y - y1 < 9 and self.y - y1 > 4:
+                if matan < 3:
+                    im = self.im1
+                else:
+                    im = self.im2
+                image_rect = im.get_rect(topleft=(d * (dx+0.4), d * (dy-5)))
+                sc.blit(im, image_rect)            
+        
 class Background():
     def draw(self, sc, pix, x, y, width, height):
         dx = (width - 1) / 2

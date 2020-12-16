@@ -1,11 +1,10 @@
 import pygame
-import sys
 from pygame.draw import *
 from pygame.locals import *
 from PIL import Image
 from visual import *
 
-from objects import Hero, Background, d, WHITE, BLACK, GREEN, Moneta, h14, Rat
+from objects import Hero, Background, d, WHITE, BLACK, GREEN, Moneta, h14, Rat, Matan, h20, Npc
 from download import dorm
 
 pygame.init()
@@ -45,9 +44,13 @@ e2 = pause_button.h
 pause_button.x += (width * d // 2 - e1) // 2
 pause_button.y += (100 - e2) // 2
 
+matans = [Matan(27,75), Matan(25, 22), Matan(89, 43)]
+
+npc=Npc(45,45)
 
 def game(player):
     sc = 0
+    sc1=0
     time = 0
     global exit_button, pause_button, monets
     finished = False
@@ -56,7 +59,7 @@ def game(player):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
-                raise sys.exit()
+                raise SystemExit
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if exit_button.check():
                     finished = True
@@ -71,7 +74,6 @@ def game(player):
         background.draw(screen, pix, hero.x, hero.y, width, height)
         for moneta in monets:
             moneta.draw(screen, hero.x, hero.y, width, height)
-        hero.draw(screen, width, height)
         pause_button.draw()
         exit_button.draw()
         x1 = hero.x
@@ -87,8 +89,16 @@ def game(player):
             i.calculate()
             if i.drawandcheck(screen, x1, y1):
                 finished = True
-        screen.blit(f1.render(str(sc), 1, (0, 0, 0)), (400, 640))
+        for i in matans:
+            i.draw(screen, x1, y1)
+            if i.check(x1, y1) == True:
+                sc1+=1
+        screen.blit(f1.render(str(sc) , 1, (0, 0, 0)), (400, 640))
         screen.blit(h14, (340, 630))
+        screen.blit(f1.render(str(sc1)+'/3' , 1, (0, 0, 0)), (500, 640))
+        screen.blit(h20, (445, 630))
+        npc.draw(screen, x1, y1, sc1)
+        hero.draw(screen, width, height)
         pygame.display.update()
         clock.tick(FPS)
         if not paused:
@@ -115,7 +125,7 @@ def start_menu():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
-                raise sys.exit()
+                raise SystemExit
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if start_button.check():
                     name = name_menu()
@@ -123,7 +133,7 @@ def start_menu():
                     game(name)
                 if end_button.check():
                     pygame.quit()
-                    raise sys.exit()
+                    raise SystemExit
         dorm_rect = dorm.get_rect(topleft=(0, 0))
         screen.blit(dorm, dorm_rect)
         start_button.draw()
@@ -150,7 +160,7 @@ def name_menu():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
-                raise sys.exit()
+                raise SystemExit
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if ok_button.check():
                     return name_input.text
