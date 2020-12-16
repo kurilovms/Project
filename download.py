@@ -81,4 +81,3 @@ h17.set_colorkey(WHITE)
 h18 = pygame.image.load("18.png")
 h18 = pygame.transform.scale(h18, (d, d))
 h18.set_colorkey(WHITE)
-
