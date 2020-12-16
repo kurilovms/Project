@@ -73,8 +73,8 @@ def game(player):
         hero.draw(screen, width, height)
         pause_button.draw()
         exit_button.draw()
-        x1= hero.x
-        y1= hero.y
+        x1 = hero.x
+        y1 = hero.y
         monets_new = []
         for moneta in monets:
             if moneta.check(hero.x, hero.y):
