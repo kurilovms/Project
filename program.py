@@ -1,4 +1,5 @@
 import pygame
+import sys
 from pygame.draw import *
 from pygame.locals import *
 from PIL import Image
@@ -55,7 +56,7 @@ def game(player):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
-                raise SystemExit
+                raise sys.exit()
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if exit_button.check():
                     finished = True
@@ -86,7 +87,7 @@ def game(player):
             i.calculate()
             if i.drawandcheck(screen, x1, y1):
                 finished = True
-        screen.blit(f1.render(str(sc) , 1, (0, 0, 0)), (400, 640))
+        screen.blit(f1.render(str(sc), 1, (0, 0, 0)), (400, 640))
         screen.blit(h14, (340, 630))
         pygame.display.update()
         clock.tick(FPS)
@@ -114,7 +115,7 @@ def start_menu():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
-                raise SystemExit
+                raise sys.exit()
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if start_button.check():
                     name = name_menu()
@@ -122,7 +123,7 @@ def start_menu():
                     game(name)
                 if end_button.check():
                     pygame.quit()
-                    raise SystemExit
+                    raise sys.exit()
         dorm_rect = dorm.get_rect(topleft=(0, 0))
         screen.blit(dorm, dorm_rect)
         start_button.draw()
@@ -149,7 +150,7 @@ def name_menu():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
-                raise SystemExit
+                raise sys.exit()
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if ok_button.check():
                     return name_input.text
