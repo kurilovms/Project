@@ -15,7 +15,7 @@ class Button:
         self.h = h
         self.text = text
         self.rect = pygame.Rect(0, 0, 0, 0)
-    
+
     def draw(self):
         font = pygame.font.SysFont(*BUTTON_FONT)
         textsurface = font.render(self.text, False, (0, 0, 0))
@@ -76,9 +76,8 @@ class InputBox:
                 surf, (x, y), surfscaled)
         screen = pygame.display.get_surface()
         self.rect = pygame.Rect(self.x - 10, self.y - 10, max(self.length, x + 20), y + 20)
-        
+
         pygame.draw.rect(screen, FIELD_COLOR, self.rect, 2)
         if self.active:
             pygame.draw.rect(screen, FIELD_ACTIVE_COLOR, self.rect, 2)
         screen.blit(surfscaled, (self.x, self.y))
-
