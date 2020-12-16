@@ -4,26 +4,32 @@ from pygame.locals import *
 from PIL import Image
 from visual import *
 
-from objects import Hero, Background, d, WHITE, BLACK
+from objects import Hero, Background, d, WHITE, BLACK, GREEN, Moneta, h14, Rat
 from download import dorm
 
 pygame.init()
-
 FPS = 30
 
 image = Image.open("karta.png")
-# следующие 2 параметра обязательно нечетные
 height = 15
 width = 21
 pix = image.load()
+l1, l2 = image.size
 
 screen = pygame.display.set_mode((600, 800))
 pygame.display.update()
 clock = pygame.time.Clock()
-score = 0
 font = pygame.font.Font(None, 72)
 hero = Hero(47,42)
 background = Background()
+monets = []
+for i in range(l1):
+    for j in range(l2):
+        if pix[i,j][:-1] == GREEN:
+            monets.append(Moneta(i,j))
+
+f1 = pygame.font.Font(None, 36)
+rats = [Rat(0, 0.4, 4 , 4, 52, 60)]
 
 exit_button = Button(0, height*d+10, 'Back to menu')
 pause_button = Button(width*d//2, height*d+10, 'Pause')
@@ -40,7 +46,9 @@ pause_button.y += (100 - e2) // 2
 
 
 def game(player):
-    global exit_button, pause_button
+    sc = 0
+    time = 0
+    global exit_button, pause_button, monets
     finished = False
     paused = False
     while not finished:
@@ -60,16 +68,33 @@ def game(player):
                         pause_button.text = 'Unpause'
         screen.fill(WHITE)
         background.draw(screen, pix, hero.x, hero.y, width, height)
+        for moneta in monets:
+            moneta.draw(screen, hero.x, hero.y, width, height)
         hero.draw(screen, width, height)
         pause_button.draw()
         exit_button.draw()
+        x1= hero.x
+        y1= hero.y
+        monets_new = []
+        for moneta in monets:
+            if moneta.check(hero.x, hero.y):
+                sc += 1
+            else:
+                monets_new += [moneta]
+        monets = monets_new
+        for i in rats:
+            i.calculate()
+            if i.drawandcheck(screen, x1, y1):
+                finished = True
+        screen.blit(f1.render(str(sc) , 1, (0, 0, 0)), (400, 640))
+        screen.blit(h14, (340, 630))
         pygame.display.update()
         clock.tick(FPS)
         if not paused:
             keys = pygame.key.get_pressed()
             hero.move(keys, FPS, pix, background)
     inp = open('players.txt', 'a')
-    inp.write(player + '\n')
+    inp.write(player+' '+str(sc)+'\n')
     inp.close
     start_menu()
 

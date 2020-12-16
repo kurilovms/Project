@@ -16,14 +16,7 @@ WHITE = (255, 255, 255)
 COLORS = [RED, BLUE, YELLOW, GREEN, MAGENTA, CYAN, WHITE]
 
 from download import back1, back2, back3
-from download import h1, h2, h3, h4, h5, h6, h7, h8, h9, h10, h11, h12
-
-back1 = pygame.image.load("back1.png")
-back1 = pygame.transform.scale(back1, (d, d))
-back2 = pygame.image.load("back2.png")
-back2 = pygame.transform.scale(back2, (d, d))
-back3 = pygame.image.load("back3.png")
-back3 = pygame.transform.scale(back3, (d, d))
+from download import h1, h2, h3, h4, h5, h6, h7, h8, h9, h10, h11, h12, h13, h14, h15, h16, h17, h18
 
 
 class Hero():
@@ -93,7 +86,71 @@ class Hero():
         image_rect = im.get_rect(topleft=(d * dx, d * dy))
         sc.blit(im, image_rect)
 
-
+class Moneta():
+    
+    def __init__(self, x=0, y=0):
+        self.x = x
+        self.y = y
+        self.im = h13
+        
+    def draw(self, sc, x1, y1, width, height):
+        dx = self.x - x1 + (width-1)/2
+        dy = self.y - y1 + (height-1)/2
+        if 0 <= dx <= width and 0 <= dy < height:
+            im = self.im
+            image_rect = im.get_rect(topleft=(d*dx, d*dy))
+            sc.blit(im, image_rect)
+        
+    def check(self, x1, y1):
+        if self.x == x1:
+            if self.y == y1:
+                self.x = -1
+                self.y = -1
+                return True
+            
+class Rat():
+    
+    def __init__(self, spdx=0, spdy=0, dx=0, dy=0, x0=0, y0=0):
+        self.x = x0
+        self.y = y0
+        self.spdx = spdx
+        self.spdy = spdy
+        self.im1 = h15
+        self.im2 = h16
+        self.im3 = h17
+        self.im4 = h18
+        self.dx = dx
+        self.dy = dy
+        self.x0= x0
+        self.y0= y0
+        
+    def calculate(self):
+        self.x+= self.spdx
+        self.y+= self.spdy
+        if self.x > self.x0 + self.dx or self.x < self.x0 - self.dx:
+           self.spdx = -self.spdx
+        if self.y > self.y0 + self.dy or self.y < self.y0 -self.dy:
+            self.spdy = -self.spdy
+            
+    def drawandcheck(self, sc, x1, y1):
+        dx = self.x - x1 
+        dy = self.y - y1
+        if self.spdy ==0:
+            if self.spdx >0:
+                im = self.im2
+            else:
+                im= self.im1
+        if self.spdx ==0:
+            if self.spdy > 0:
+                im = self.im4
+            else:
+                im = self.im3
+        image_rect = im.get_rect(topleft=(d * dx, d * dy))
+        sc.blit(im, image_rect)
+        if self.x - x1 < 11 and self.x - x1  > 9 :
+            if self.y - y1 < 8 and self.y - y1 > 6  :
+                return True
+            
 class Background():
     def draw(self, sc, pix, x, y, width, height):
         dx = (width - 1) / 2
@@ -107,5 +164,8 @@ class Background():
                     image_rect = back2.get_rect(topleft=(d * i, d * j))
                     sc.blit(back2, image_rect)
                 elif pix[x + i - dx, y + j - dy][:-1] == WHITE:
+                    image_rect = back3.get_rect(topleft=(d * i, d * j))
+                    sc.blit(back3, image_rect)
+                elif pix[x + i - dx, y + j - dy][:-1] == GREEN:
                     image_rect = back3.get_rect(topleft=(d * i, d * j))
                     sc.blit(back3, image_rect)
