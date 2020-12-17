@@ -163,8 +163,6 @@ class Matan():
     def __init__(self, x=0, y=0):
         self.x = x
         self.y = y
-        self.x0 = x
-        self.y0 = y
         self.im = h19
 
     def draw(self, sc, x1, y1, width, height):
@@ -181,28 +179,12 @@ class Matan():
             self.y = -1
             return True
 
-    def recovery(self):
-        self.x = self.x0
-        self.y = self.y0
-
 
 class Ivanovnik(Matan):
     def __init__(self, x=0, y=0):
         self.x = x
         self.y = y
-        self.x0 = x
-        self.y0 = y
         self.im = ivanovnik
-
-    def check(self, x1, y1):
-        if self.x == x1 and self.y == y1:
-            self.x = -1
-            self.y = -1
-            return True
-
-    def recovery(self):
-        self.x = self.x0
-        self.y = self.y0
 
 
 class Npc():

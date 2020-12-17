@@ -104,10 +104,6 @@ h23 = pygame.image.load("23.png")
 h23 = pygame.transform.scale(h23, (int(6*d), int(5*d)))
 h23.set_colorkey(WHITE)
 
-h24 = pygame.image.load('ivanovnik.png')
-h24 = pygame.transform.scale(h24, (d, d))
-h24.set_colorkey(WHITE)
-
 ivanovnik = pygame.image.load('ivanovnik.png')
 ivanovnik = pygame.transform.scale(ivanovnik, (d, d))
 ivanovnik.set_colorkey(WHITE)

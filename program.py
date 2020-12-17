@@ -7,7 +7,7 @@ from PIL import Image
 from visual import * 
 
 from objects import Hero, Background, d, WHITE, BLACK, GREEN, BLUE, Moneta, Rat, Matan, Npc, Ivanovnik
-from download import dorm, ratat, ded, h14, h20, h24
+from download import dorm, ratat, ded, h14, h20, ivanovnik
 
 pygame.init()
 FPS = 30
@@ -21,6 +21,7 @@ l1, l2 = image.size
 screen = pygame.display.set_mode((600, 800))
 pygame.display.update()
 clock = pygame.time.Clock()
+font = pygame.font.Font(None, 72)
 f1 = pygame.font.Font(None, 36)
 background = Background()
 monets = []
@@ -124,8 +125,8 @@ def game(player):
         screen.blit(h14, (290, 630))
         screen.blit(f1.render(str(sc1) + '/3', 1, BLACK), (450, 640))
         screen.blit(h20, (395, 630))
-        screen.blit(f1.render(str(sc2) + '/3', 1, BLACK), (550, 640))
-        screen.blit(h24, (495, 630))
+        screen.blit(f1.render(str(sc2) + '/11', 1, BLACK), (550, 640))
+        screen.blit(ivanovnik, (495, 630))
         hero.draw(screen, width, height)
         npc.draw(screen, hero.x, hero.y, width, height, sc1, sc2)
         pygame.display.update()
@@ -142,12 +143,6 @@ def game(player):
     inp = open('players.txt', 'a')
     inp.write(player + ' ' + str(sc) + ' ' + str(sc1)+ ' ' + str(sc2) + '\n')
     inp.close
-    for moneta in monets:
-        moneta.recovery()
-    for matan in matans:
-        matan.recovery()
-    for iv in ivanovnics:
-        iv.recovery()
 
 
 def start_menu():
@@ -216,8 +211,8 @@ def die_menu(s, s1, s2):
         screen.blit(h14, (50, 150))
         screen.blit(f1.render(str(s1) + '/3', 1, BLACK), (100, 200))
         screen.blit(h20, (50, 200))
-        screen.blit(f1.render(str(s2) + '/3', 1, BLACK), (100, 250))
-        screen.blit(h24, (50, 250))
+        screen.blit(f1.render(str(s2) + '/11', 1, BLACK), (100, 250))
+        screen.blit(ivanovnik, (50, 250))
         ok_button.draw()
         pygame.display.update()
         screen.fill(WHITE)
@@ -252,7 +247,7 @@ def win_menu(s, s1, s2):
         screen.blit(f1.render(str(s1) + '/3', 1, BLACK), (100, 200))
         screen.blit(h20, (50, 200))
         screen.blit(f1.render(str(s2) + '/3', 1, BLACK), (100, 250))
-        screen.blit(h24, (50, 250))
+        screen.blit(ivanovnik, (50, 250))
         ok_button.draw()
         pygame.display.update()
         screen.fill(WHITE)
