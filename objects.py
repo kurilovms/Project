@@ -13,7 +13,8 @@ MAGENTA = (255, 0, 255)
 CYAN = (0, 255, 255)
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
-COLORS = [RED, BLUE, YELLOW, GREEN, MAGENTA, CYAN, WHITE]
+GRAY = (195, 195, 195)
+COLORS = [RED, BLUE, YELLOW, GREEN, MAGENTA, CYAN, WHITE, GRAY]
 
 from download import back1, back2, back3
 from download import h1, h2, h3, h4, h5, h6, h7, h8, h9, h10, h11, h12,\
