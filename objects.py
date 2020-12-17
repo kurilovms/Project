@@ -21,8 +21,12 @@ from download import h1, h2, h3, h4, h5, h6, h7, h8, h9, h10, h11, h12,\
 
 
 class Hero():
-    """Тип данных, описывающий главного героя."""
+    """Тип данных, описывающий главного героя"""
     def __init__(self, x=0, y=0):
+        """
+        Args: x, y - координаты главного героя
+
+        """
         self.x = x
         self.y = y
         self.im = h1
@@ -30,6 +34,15 @@ class Hero():
         self.direction = 'forward'
 
     def move(self, keys, FPS, pix, background):
+        """
+        Описывает движение главного героя
+        Он упирается в стены и шагает, останавливается при ненажатых клавишах
+        Управление стрелочками или кнопками W, A, S, D
+
+        Agrs:   keys - данные, позволяющие зажимать клавиши, а не нажимать их каждый раз
+                pix - массив, соответствующий карте
+
+        """
         x = self.x
         y = self.y
         if (keys[pygame.K_w] or keys[pygame.K_UP])\
@@ -83,6 +96,14 @@ class Hero():
                 self.im = h7
 
     def draw(self, sc, width, height):
+        """
+        Выводит изображение главного героя на экран
+
+        Agrs:   sc - объект pygame.Surface
+                width - ширина экрана в d
+                height - высота экрана в d
+
+        """
         dx = (width - 1) / 2
         dy = (height - 1) / 2
         im = self.im
@@ -91,7 +112,12 @@ class Hero():
 
 
 class Moneta():
+    """Тип данных, описывающий монету"""
     def __init__(self, x=0, y=0):
+        """
+        Args:   x, y - координаты монеты
+
+        """
         self.x = x
         self.y = y
         self.x0 = x
@@ -99,6 +125,15 @@ class Moneta():
         self.im = h13
 
     def draw(self, sc, x1, y1, width, height):
+        """
+        Выводит изображение монеты на экран
+
+        Agrs:   sc - объект pygame.Surface
+                x1, y1 - координаты главного героя
+                width - ширина экрана в d
+                height - высота экрана в d
+
+        """
         dx = self.x - x1 + (width-1)/2
         dy = self.y - y1 + (height-1)/2
         if 0 <= dx <= width and 0 <= dy < height:
@@ -107,6 +142,13 @@ class Moneta():
             sc.blit(im, image_rect)
 
     def check(self, x1, y1):
+        """
+        Проверяется, взял ли главный герой эту монету
+        Если взял, то монета помещается за экран, функция возвращает True
+
+        Agrs:   x1, y1 - координаты главного героя
+
+        """
         if self.x == x1:
             if self.y == y1:
                 self.x = -1
@@ -114,12 +156,22 @@ class Moneta():
                 return True
 
     def recovery(self):
+        """Восстанавливает изначальное положение монет"""
         self.x = self.x0
         self.y = self.y0
 
 
 class Rat():
+    """Тип данных, описывающий крысу"""
     def __init__(self, spdx=0, spdy=0, dx=0, dy=0, x0=0, y0=0):
+        """
+        Args:   x0, y0 - начальные координаты крысы
+                spdx - начальная скорость крысы вдоль оси x
+                spdy - начальная скорость крысы вдоль оси y
+                dx - максимальное отклонение от начального положения вдоль оси x
+                dy - максимальное отклонение от начального положения вдоль оси y
+
+                """
         self.x = x0
         self.y = y0
         self.spdx = spdx
@@ -134,6 +186,12 @@ class Rat():
         self.y0 = y0
 
     def calculate(self):
+        """
+        Реализуется движение крысы
+        Крыса двигатся только вдоль ox или oy
+        Разворачивает крысу, если она отошла от начального положения на амплитудное значение
+
+        """
         self.x += self.spdx
         self.y += self.spdy
         if abs(self.x - self.x0) > self.dx:
@@ -142,6 +200,15 @@ class Rat():
             self.spdy = -self.spdy
 
     def draw(self, sc, x1, y1, width, height):
+        """
+        Выводит изображение крысы на экран
+
+        Agrs:   sc - объект pygame.Surface
+                x1, y1 - координаты главного героя
+                width - ширина экрана в d
+                height - высота экрана в d
+
+        """
         dx = self.x - x1 + (width - 1) / 2
         dy = self.y - y1 + (height - 1) / 2
         if 0 <= dx <= width and 0 <= dy < height:
@@ -159,17 +226,38 @@ class Rat():
             sc.blit(im, image_rect)
 
     def check(self, x1, y1):
+        """
+        Проверяется, столкнулся ли главный герой с крысой
+        Если столкнулся, то функция возвращает True
+
+        Agrs:   x1, y1 - координаты главного героя
+
+        """
         if abs(self.x - x1) < 1 and abs(self.y - y1) < 1:
             return True
 
 
 class Matan():
+    """Тип данных, описывающий задание по матану"""
     def __init__(self, x=0, y=0):
+        """
+        Args:   x, y - координаты задания
+
+        """
         self.x = x
         self.y = y
         self.im = h19
 
     def draw(self, sc, x1, y1, width, height):
+        """
+        Выводит изображение задания
+
+        Agrs:   sc - объект pygame.Surface
+                x1, y1 - координаты главного героя
+                width - ширина экрана в d
+                height - высота экрана в d
+
+        """
         dx = self.x - x1 + (width - 1) / 2
         dy = self.y - y1 + (height - 1) / 2
         if 0 <= dx <= width and 0 <= dy < height:
@@ -178,6 +266,13 @@ class Matan():
             sc.blit(im, image_rect)
 
     def check(self, x1, y1):
+        """
+        Проверяется, взял ли главный герой это задание
+        Если взял, то задание помещается за экран, функция возвращает True
+
+        Agrs:   x1, y1 - координаты главного героя
+
+        """
         if self.x == x1 and self.y == y1:
             self.x = -1
             self.y = -1
@@ -185,14 +280,19 @@ class Matan():
 
 
 class Ivanovnik(Matan):
+    """Тип данных, описывающий учебник Г. Е. Иванова"""
     def __init__(self, x=0, y=0):
+        """
+        Args:   x, y - координаты учебника
+
+        """
         self.x = x
         self.y = y
         self.im = ivanovnik
 
 
 class Npc():
-
+    """Тип данных, описывающий преподавателя"""
     def __init__(self, x=0, y=0):
         self.x = x
         self.y = y
@@ -201,6 +301,15 @@ class Npc():
         self.im2 = h23
 
     def draw(self, sc, x1, y1, width, height, matan, ivanovnik):
+        """
+        Выводит изображение преподавателя на экран
+
+        Agrs:   sc - объект pygame.Surface
+                x1, y1 - координаты главного героя
+                width - ширина экрана в d
+                height - высота экрана в d
+
+        """
         dx = self.x - x1 + (width - 1) / 2
         dy = self.y - y1 + (height - 1) / 2
         if 0 <= dx <= width and 0 <= dy < height:
@@ -216,12 +325,31 @@ class Npc():
             sc.blit(im, image_rect)
 
     def check(self, x1, y1, matan):
+        """
+        Если герой подходит к преподавателю, проверяется, есть ли у героя все 3 задания
+        Если да, функция возвращает True
+
+        Agrs:   x1, y1 - координаты главного героя
+                matan - количество заданий у героя
+
+        """
         if abs(self.x - x1) <= 1 and abs(self.y - y1) <= 1 and matan == 3:
             return True
 
 
 class Background():
+    """Тип данных, описывающий фон"""
     def draw(self, sc, pix, x, y, width, height):
+        """
+        Рисует фон вокруг игрока
+
+        Agrs:
+            pix - массив, соответствующий карте
+            x, y - координаты главного героя
+            width - ширина экрана в d
+            height - высота экрана в d
+
+        """
         dx = (width - 1) / 2
         dy = (height - 1) / 2
         for i in range(width):

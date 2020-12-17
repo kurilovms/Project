@@ -8,7 +8,15 @@ BUTTON_COLOR = (0, 255, 0)
 
 
 class Button:
+    """Класс, описывающий кнопку"""
     def __init__(self, x=0, y=0, text='', w=0, h=0):
+        """
+        Args:
+            x, y - координаты левого верхнего края кнопки
+            text - текст внутри кнопки
+            w, h - ширина и высота кнопки соответственно
+
+        """
         self.x = x
         self.y = y
         self.w = w
@@ -17,6 +25,7 @@ class Button:
         self.rect = pygame.Rect(0, 0, 0, 0)
 
     def draw(self):
+        """Функция рисует кнопку"""
         font = pygame.font.SysFont(*BUTTON_FONT)
         textsurface = font.render(self.text, False, (0, 0, 0))
         x, y = textsurface.get_size()
@@ -38,11 +47,18 @@ class Button:
         screen.blit(surfscaled, (self.x, self.y))
 
     def check(self):
+        """Функция проверяет, нажата ли кнопка"""
         return self.rect.collidepoint(pygame.mouse.get_pos())
 
 
 class InputBox:
+    """Класс, описывающий поле для ввода текста"""
     def __init__(self, x, y, length):
+        """
+        Args:
+            x, y - координаты левого верхнего края поля для ввода
+            length - длина поля для ввода
+        """
         self.x = x
         self.y = y
         self.length = length
@@ -51,6 +67,12 @@ class InputBox:
         self.text = ''
 
     def event_handler(self, event):
+        """
+        Ввод текста в поле
+
+        Args:
+            event - что делают с кнопкой
+        """
         if event.type == pygame.MOUSEBUTTONDOWN:
             if self.rect.collidepoint(pygame.mouse.get_pos()):
                 self.active = not self.active
@@ -64,6 +86,7 @@ class InputBox:
                     self.text += event.unicode
 
     def draw(self):
+        """Вывод поля для текста на экран"""
         font = pygame.font.SysFont(*FIELD_FONT)
         textsurface = font.render(self.text, False, (0, 0, 0))
         x, y = textsurface.get_size()
