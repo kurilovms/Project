@@ -16,8 +16,8 @@ WHITE = (255, 255, 255)
 COLORS = [RED, BLUE, YELLOW, GREEN, MAGENTA, CYAN, WHITE]
 
 from download import back1, back2, back3
-from download import h1, h2, h3, h4, h5, h6, h7, h8, h9, h10, h11, h12, h13, h14, h15, h16, h17, h18, h19,\
-h20, h21, h22, h23, ivanovnik
+from download import h1, h2, h3, h4, h5, h6, h7, h8, h9, h10, h11, h12,\
+    h13, h14, h15, h16, h17, h18, h19, h20, h21, h22, h23, ivanovnik
 
 
 class Hero():
@@ -32,7 +32,8 @@ class Hero():
     def move(self, keys, FPS, pix, background):
         x = self.x
         y = self.y
-        if (keys[pygame.K_w] or keys[pygame.K_UP]) and pix[x, y - 1] != (0, 0, 0, 255):
+        if (keys[pygame.K_w] or keys[pygame.K_UP])\
+                and pix[x, y - 1] != (0, 0, 0, 255):
             self.y -= 1
             self.direction = 'backward'
             if self.left_leg:
@@ -41,7 +42,8 @@ class Hero():
             else:
                 self.im = h6
                 self.left_leg = True
-        elif (keys[pygame.K_s] or keys[pygame.K_DOWN]) and pix[x, y + 1] != (0, 0, 0, 255):
+        elif (keys[pygame.K_s] or keys[pygame.K_DOWN])\
+                and pix[x, y + 1] != (0, 0, 0, 255):
             self.y += 1
             self.direction = 'forward'
             if self.left_leg:
@@ -50,7 +52,8 @@ class Hero():
             else:
                 self.im = h3
                 self.left_leg = True
-        elif (keys[pygame.K_a] or keys[pygame.K_LEFT]) and pix[x - 1, y] != (0, 0, 0, 255):
+        elif (keys[pygame.K_a] or keys[pygame.K_LEFT])\
+                and pix[x - 1, y] != (0, 0, 0, 255):
             self.x -= 1
             self.direction = 'leftward'
             if self.left_leg:
@@ -59,7 +62,8 @@ class Hero():
             else:
                 self.im = h12
                 self.left_leg = True
-        elif (keys[pygame.K_d] or keys[pygame.K_RIGHT]) and pix[x + 1, y] != (0, 0, 0, 255):
+        elif (keys[pygame.K_d] or keys[pygame.K_RIGHT])\
+                and pix[x + 1, y] != (0, 0, 0, 255):
             self.x += 1
             self.direction = 'rightward'
             if self.left_leg:
@@ -130,8 +134,8 @@ class Rat():
         self.y0 = y0
 
     def calculate(self):
-        self.x+= self.spdx
-        self.y+= self.spdy
+        self.x += self.spdx
+        self.y += self.spdy
         if abs(self.x - self.x0) > self.dx:
             self.spdx = -self.spdx
         if abs(self.y - self.y0) > self.dy:
@@ -210,7 +214,7 @@ class Npc():
                 im = self.im2
             image_rect = im.get_rect(topleft=(d * (dx + 0.4), d * (dy - 5)))
             sc.blit(im, image_rect)
-    
+
     def check(self, x1, y1, matan):
         if abs(self.x - x1) <= 1 and abs(self.y - y1) <= 1 and matan == 3:
             return True
@@ -231,6 +235,7 @@ class Background():
                 elif pix[x + i - dx, y + j - dy][:-1] == WHITE:
                     image_rect = back3.get_rect(topleft=(d * i, d * j))
                     sc.blit(back3, image_rect)
-                elif (pix[x + i - dx, y + j - dy][:-1] == BLUE) or (pix[x + i - dx, y + j - dy][:-1] == GREEN):
+                elif (pix[x + i - dx, y + j - dy][:-1] == BLUE)\
+                        or (pix[x + i - dx, y + j - dy][:-1] == GREEN):
                     image_rect = back3.get_rect(topleft=(d * i, d * j))
                     sc.blit(back3, image_rect)

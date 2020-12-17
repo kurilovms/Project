@@ -4,9 +4,10 @@ import tkinter as tk
 from pygame.draw import *
 from pygame.locals import *
 from PIL import Image
-from visual import * 
+from visual import *
 
-from objects import Hero, Background, d, WHITE, BLACK, GREEN, BLUE, Moneta, Rat, Matan, Npc, Ivanovnik
+from objects import Hero, Background, d, WHITE, BLACK, GREEN, BLUE, Moneta,\
+    Rat, Matan, Npc, Ivanovnik
 from download import dorm, ratat, ded, h14, h20, ivanovnik
 
 pygame.init()
@@ -47,7 +48,8 @@ pause_button.x += 50 + (width * d // 2 - e1) // 2
 pause_button.y += (100 - e2) // 2
 
 matans = [Matan(79, 33), Matan(131, 37), Matan(115, 114)]
-npc=Npc(66, 70)
+npc = Npc(66, 70)
+
 
 def game(player):
     if player == '':
@@ -101,7 +103,7 @@ def game(player):
                 finished = True
                 die_menu(sc, sc1, sc2)
         for matan in matans:
-            if matan.check(hero.x, hero.y) == True:
+            if matan.check(hero.x, hero.y) is True:
                 sc1 += 1
         for book in ivanovnics:
             if book.check(hero.x, hero.y):
@@ -141,7 +143,7 @@ def game(player):
             pygame.time.wait(1000)
             win_menu(sc, sc1, sc2)
     inp = open('players.txt', 'a')
-    inp.write(player + ' ' + str(sc) + ' ' + str(sc1)+ ' ' + str(sc2) + '\n')
+    inp.write(player + ' ' + str(sc) + ' ' + str(sc1) + ' ' + str(sc2) + '\n')
     inp.close
 
 
@@ -191,7 +193,7 @@ def die_menu(s, s1, s2):
     screen = pygame.display.set_mode((w, l))
     f1 = pygame.font.Font(None, 40)
     text1 = f1.render('ВЫ УМЕРЛИ!', True, BLACK)
-    text2 = f1.render('Ваш счет:',True, BLACK)
+    text2 = f1.render('Ваш счет:', True, BLACK)
     ok_button = Button(50, 320, 'OK')
     back = False
     while not back:
@@ -226,7 +228,7 @@ def win_menu(s, s1, s2):
     screen = pygame.display.set_mode((w, l))
     f1 = pygame.font.Font(None, 40)
     text1 = f1.render('ВЫ ВЫЖИЛИ!', True, BLACK)
-    text2 = f1.render('Ваш счет:',True, BLACK)
+    text2 = f1.render('Ваш счет:', True, BLACK)
     ok_button = Button(50, 320, 'OK')
     back = False
     while not back:
@@ -307,7 +309,9 @@ def best_scores():
     root_scores = tk.Tk()
     root_scores.title("Лучшие результаты")
     root_scores.geometry('350x350')
-    back = tk.Button(text='Back to menu', command=lambda: root_scores.destroy(), width=10, font='28')
+    back = tk.Button(text='Back to menu',
+                     command=lambda: root_scores.destroy(),
+                     width=10, font='28')
     back.grid(row=0, column=0, columnspan=4, pady=5)
     head_name = tk.Label(root_scores, text=' name ', font='28')
     head_name.grid(row=1, column=0)

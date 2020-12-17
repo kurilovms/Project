@@ -40,6 +40,7 @@ class Button:
     def check(self):
         return self.rect.collidepoint(pygame.mouse.get_pos())
 
+
 class InputBox:
     def __init__(self, x, y, length):
         self.x = x
@@ -75,7 +76,8 @@ class InputBox:
         pygame.transform.smoothscale(
                 surf, (x, y), surfscaled)
         screen = pygame.display.get_surface()
-        self.rect = pygame.Rect(self.x - 10, self.y - 10, max(self.length, x + 20), y + 20)
+        self.rect = pygame.Rect(self.x - 10, self.y - 10,
+                                max(self.length, x + 20), y + 20)
 
         pygame.draw.rect(screen, FIELD_COLOR, self.rect, 2)
         if self.active:
