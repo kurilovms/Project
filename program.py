@@ -1,10 +1,11 @@
 import pygame
+import sys
 from pygame.draw import *
 from pygame.locals import *
 from PIL import Image
 from visual import *
 
-from objects import Hero, Background, d, WHITE, BLACK, GREEN, Moneta, h14, Rat, Matan, h20, Npc
+from objects import Hero, Background, d, WHITE, BLACK, GREEN, BLUE, Moneta, h14, Rat, Matan, h20, Npc, Ivanovnik
 from download import dorm
 
 pygame.init()
@@ -20,16 +21,18 @@ screen = pygame.display.set_mode((600, 800))
 pygame.display.update()
 clock = pygame.time.Clock()
 font = pygame.font.Font(None, 72)
-hero = Hero(47,42)
+f1 = pygame.font.Font(None, 36)
 background = Background()
 monets = []
+ivanovnics = []
 for i in range(l1):
     for j in range(l2):
-        if pix[i,j][:-1] == GREEN:
-            monets.append(Moneta(i,j))
+        if pix[i, j][:-1] == GREEN:
+            monets.append(Moneta(i, j))
+        if pix[i, j][:-1] == BLUE:
+            ivanovnics.append(Ivanovnik(i, j))
 
-f1 = pygame.font.Font(None, 36)
-rats = [Rat(0, 0.4, 4 , 4, 52, 60)]
+# возможно пригодится для первого уровня: rats = [Rat(0, 0.4, 4, 4, 52, 60)]
 
 exit_button = Button(0, height*d+10, 'Back to menu')
 pause_button = Button(width*d//2, height*d+10, 'Pause')
@@ -44,13 +47,35 @@ e2 = pause_button.h
 pause_button.x += (width * d // 2 - e1) // 2
 pause_button.y += (100 - e2) // 2
 
-matans = [Matan(27,75), Matan(25, 22), Matan(89, 43)]
-
-npc=Npc(45,45)
+matans = [Matan(79,33), Matan(131, 37), Matan(115, 114)]
+# возможно пригодится для первого уровня: matans = [Matan(27, 75), Matan(25, 22), Matan(89, 43)]
+npc=Npc(66, 70)
+# возможно пригодится для первого уровня: npc=Npc(45,45)
 
 def game(player):
+    if player == '':
+        player = 'nan'
+    hero = Hero(71, 70)
+    rats = [Rat(0.05, 0, 1, 0, 49, 65),
+            Rat(0.1, 0, 1, 0, 51, 61),
+            Rat(0.2, 0, 1, 0, 49, 57),
+            Rat(0, 0.2, 0, 3, 20, 49),
+            Rat(0, -0.2, 0, 3, 18, 49),
+            Rat(0, 0.2, 0, 4, 72, 33),
+            Rat(0, 0.1, 0, 4, 139, 35),
+            Rat(0, 0.05, 0, 2, 144, 34),
+            Rat(0, 0.1, 0, 3, 150, 36),
+            Rat(0, 0.1, 0, 3, 155, 36),
+            Rat(0, 0.05, 0, 2, 168, 46),
+            Rat(0, 0.1, 0, 2, 156, 99),
+            Rat(0, -0.1, 0, 2, 152, 97),
+            Rat(0, 0.1, 0, 2, 148, 99),
+            Rat(0, -0.1, 0, 2, 144, 97),
+            Rat(0, 0.2, 0, 3, 110, 101),
+            Rat(0, 0.1, 0, 2, 193, 127),
+            Rat(0, 0.2, 0, 2, 114, 79)]
     sc = 0
-    sc1=0
+    sc1 = 0
     time = 0
     global exit_button, pause_button, monets
     finished = False
@@ -59,7 +84,7 @@ def game(player):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
-                raise SystemExit
+                raise sys.exit()
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if exit_button.check():
                     finished = True
@@ -70,44 +95,51 @@ def game(player):
                     else:
                         paused = True
                         pause_button.text = 'Unpause'
-        screen.fill(WHITE)
-        background.draw(screen, pix, hero.x, hero.y, width, height)
-        for moneta in monets:
-            moneta.draw(screen, hero.x, hero.y, width, height)
-        pause_button.draw()
-        exit_button.draw()
-        x1 = hero.x
-        y1 = hero.y
-        monets_new = []
         for moneta in monets:
             if moneta.check(hero.x, hero.y):
                 sc += 1
-            else:
-                monets_new += [moneta]
-        monets = monets_new
-        for i in rats:
-            i.calculate()
-            if i.drawandcheck(screen, x1, y1):
+        for rat in rats:
+            if rat.check(hero.x, hero.y):
                 finished = True
-        for i in matans:
-            i.draw(screen, x1, y1)
-            if i.check(x1, y1) == True:
-                sc1+=1
-        screen.blit(f1.render(str(sc) , 1, (0, 0, 0)), (400, 640))
+        for matan in matans:
+            if matan.check(hero.x, hero.y) == True:
+                sc1 += 1
+        for book in ivanovnics:
+            if book.check(hero.x, hero.y):
+                sc += 10
+                ivanovnics.remove(book)
+
+        screen.fill(WHITE)
+        background.draw(screen, pix, hero.x, hero.y, width, height)
+        for rat in rats:
+            rat.calculate()
+            rat.draw(screen, hero.x, hero.y, width, height)
+        for moneta in monets:
+            moneta.draw(screen, hero.x, hero.y, width, height)
+        for matan in matans:
+            matan.draw(screen, hero.x, hero.y, width, height)
+        for book in ivanovnics:
+            book.draw(screen, hero.x, hero.y, width, height)
+        pause_button.draw()
+        exit_button.draw()
+        screen.blit(f1.render(str(sc), 1, BLACK), (400, 640))
         screen.blit(h14, (340, 630))
-        screen.blit(f1.render(str(sc1)+'/3' , 1, (0, 0, 0)), (500, 640))
+        screen.blit(f1.render(str(sc1) + '/3', 1, BLACK), (500, 640))
         screen.blit(h20, (445, 630))
-        npc.draw(screen, x1, y1, sc1)
         hero.draw(screen, width, height)
+        npc.draw(screen, hero.x, hero.y, width, height, sc1)
         pygame.display.update()
         clock.tick(FPS)
         if not paused:
             keys = pygame.key.get_pressed()
             hero.move(keys, FPS, pix, background)
     inp = open('players.txt', 'a')
-    inp.write(player+' '+str(sc)+'\n')
+    inp.write(player + ' ' + str(sc) + ' ' + str(sc1) + '\n')
     inp.close
-    start_menu()
+    for moneta in monets:
+        moneta.recovery()
+    for book in ivanovnics:
+        book.recovery()
 
 
 def start_menu():
@@ -120,23 +152,28 @@ def start_menu():
     x = x // 5
     y = y // 5
     start_button = Button(x*2, y*2, 'Play')
-    end_button = Button(x*2, y*3, 'Exit')
+    end_button = Button(x*2, y*4, 'Exit')
+    results_button = Button(x*1.5, y*3, 'Best scores')
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
-                raise SystemExit
+                raise sys.exit()
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if start_button.check():
                     name = name_menu()
                     screen = pygame.display.set_mode((width*d, height*d+100))
                     game(name)
+                    screen = pygame.display.set_mode((w, l))
+                if results_button.check():
+                    best_scores()
                 if end_button.check():
                     pygame.quit()
-                    raise SystemExit
+                    raise sys.exit()
         dorm_rect = dorm.get_rect(topleft=(0, 0))
         screen.blit(dorm, dorm_rect)
         start_button.draw()
+        results_button.draw()
         end_button.draw()
         clock.tick(FPS)
         pygame.display.update()
@@ -160,7 +197,7 @@ def name_menu():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
-                raise SystemExit
+                raise sys.exit()
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if ok_button.check():
                     return name_input.text
@@ -172,6 +209,42 @@ def name_menu():
         clock.tick(FPS)
         pygame.display.update()
         screen.fill(WHITE)
+
+def best_scores():
+    inp = open('players.txt', 'r')
+    if inp.read() != '':
+        with open('players.txt') as file:
+            res = []
+            for j, line in enumerate(file):
+                B = line.split()
+                name = B[0]
+                coins = int(B[1])
+                tasks = int(B[2])
+                res.append([name, coins, tasks])
+        res = sorted(res, key=lambda i: -i[1])
+        with open("players.txt", "w") as file:
+            for i in res:
+                file.write(i[0]+' '+str(i[1])+' '+str(i[2])+'\n')
+    res = res[:10]
+    root_scores = tk.Tk()
+    root_scores.title("Лучшие результаты")
+    root_scores.geometry('600x600')
+    back = tk.Button(text='Back to menu', command=lambda: root_scores.destroy(), width=10, font='28')
+    back.grid(row=0, column=0, columnspan=3, pady=5)
+    head_name = tk.Label(root_scores, text=' name ', font='28')
+    head_name.grid(row=1, column=0)
+    head_score = tk.Label(root_scores, text=' coins ', font='28')
+    head_score.grid(row=1, column=1)
+    head_shots = tk.Label(root_scores, text=' tasks ', font='28')
+    head_shots.grid(row=1, column=2)
+    for i, s in enumerate(res):
+        bar_0 = tk.Label(root_scores, text=s[0], font='28')
+        bar_0.grid(row=2+i, column=0)
+        bar_1 = tk.Label(root_scores, text=s[1], font='28')
+        bar_1.grid(row=2+i, column=1)
+        bar_2 = tk.Label(root_scores, text=s[2], font='28')
+        bar_2.grid(row=2+i, column=2)
+    root_scores.mainloop()
 
 
 start_menu()

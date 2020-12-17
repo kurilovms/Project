@@ -16,7 +16,8 @@ WHITE = (255, 255, 255)
 COLORS = [RED, BLUE, YELLOW, GREEN, MAGENTA, CYAN, WHITE]
 
 from download import back1, back2, back3
-from download import h1, h2, h3, h4, h5, h6, h7, h8, h9, h10, h11, h12, h13, h14, h15, h16, h17, h18, h19, h20, h21, h22, h23
+from download import h1, h2, h3, h4, h5, h6, h7, h8, h9, h10, h11, h12, h13, h14, h15, h16, h17, h18, h19,\
+h20, h21, h22, h23, ivanovnik
 
 
 class Hero():
@@ -85,10 +86,11 @@ class Hero():
         sc.blit(im, image_rect)
 
 class Moneta():
-    
     def __init__(self, x=0, y=0):
         self.x = x
         self.y = y
+        self.x0 = x
+        self.y0 = y
         self.im = h13
 
     def draw(self, sc, x1, y1, width, height):
@@ -105,6 +107,18 @@ class Moneta():
                 self.x = -1
                 self.y = -1
                 return True
+
+    def recovery(self):
+        self.x = self.x0
+        self.y = self.y0
+
+class Ivanovnik(Moneta):
+    def __init__(self, x=0, y=0):
+        self.x = x
+        self.y = y
+        self.x0 = x
+        self.y0 = y
+        self.im = ivanovnik
 
 class Rat():
     def __init__(self, spdx=0, spdy=0, dx=0, dy=0, x0=0, y0=0):
@@ -124,75 +138,76 @@ class Rat():
     def calculate(self):
         self.x+= self.spdx
         self.y+= self.spdy
-        if self.x > self.x0 + self.dx or self.x < self.x0 - self.dx:
-           self.spdx = -self.spdx
-        if self.y > self.y0 + self.dy or self.y < self.y0 -self.dy:
+        if abs(self.x - self.x0) >= self.dx:
+            self.spdx = -self.spdx
+        if abs(self.y - self.y0) >= self.dy:
             self.spdy = -self.spdy
 
-    def drawandcheck(self, sc, x1, y1):
-        dx = self.x - x1
-        dy = self.y - y1
-        if self.spdy == 0:
-            if self.spdx > 0:
-                im = self.im2
-            else:
-                im= self.im1
-        if self.spdx == 0:
-            if self.spdy > 0:
-                im = self.im4
-            else:
-                im = self.im3
-        image_rect = im.get_rect(topleft=(d * dx, d * dy))
-        sc.blit(im, image_rect)
-        if self.x - x1 < 11 and self.x - x1  > 9:
-            if self.y - y1 < 8 and self.y - y1 > 6:
-                return True
-            
+    def draw(self, sc, x1, y1, width, height):
+        dx = self.x - x1 + (width - 1) / 2
+        dy = self.y - y1 + (height - 1) / 2
+        if 0 <= dx <= width and 0 <= dy < height:
+            if self.spdy == 0:
+                if self.spdx > 0:
+                    im = self.im2
+                else:
+                    im = self.im1
+            if self.spdx == 0:
+                if self.spdy > 0:
+                    im = self.im4
+                else:
+                    im = self.im3
+            image_rect = im.get_rect(topleft=(d * dx, d * dy))
+            sc.blit(im, image_rect)
+
+    def check(self, x1, y1):
+        if abs(self.x - x1) < 1 and abs(self.y - y1) < 1:
+            return True
+
 class Matan():
-    
     def __init__(self, x=0, y=0):
         self.x = x
         self.y = y
         self.im = h19
-        
-    def draw(self, sc, x1, y1):
-        dx = self.x - x1
-        dy = self.y - y1
-        im = self.im
-        image_rect = im.get_rect(topleft=(d * dx, d * dy))
-        sc.blit(im, image_rect)
-        
+
+    def draw(self, sc, x1, y1, width, height):
+        dx = self.x - x1 + (width - 1) / 2
+        dy = self.y - y1 + (height - 1) / 2
+        if 0 <= dx <= width and 0 <= dy < height:
+            im = self.im
+            image_rect = im.get_rect(topleft=(d * dx, d * dy))
+            sc.blit(im, image_rect)
+
     def check(self, x1, y1):
-        if self.x - x1 == 10:
-            if self.y - y1 == 7:
-                self.x = 300
-                self.y = 300
-                return True
-            
+        if self.x == x1 and self.y == y1:
+            self.x = -1
+            self.y = -1
+            return True
+
 class Npc():
-    
+
     def __init__(self, x=0, y=0):
         self.x = x
         self.y = y
         self.im = h21
         self.im1 = h22
         self.im2 = h23
-        
-    def draw(self, sc, x1, y1, matan):
-        dx = self.x - x1
-        dy = self.y - y1
-        im = self.im
-        image_rect = im.get_rect(topleft=(d * dx, d * dy))
-        sc.blit(im, image_rect)
-        if self.x - x1 < 13 and self.x - x1  > 7:
-            if self.y - y1 < 9 and self.y - y1 > 4:
-                if matan < 3:
-                    im = self.im1
-                else:
-                    im = self.im2
-                image_rect = im.get_rect(topleft=(d * (dx+0.4), d * (dy-5)))
-                sc.blit(im, image_rect)            
-        
+
+    def draw(self, sc, x1, y1, width, height, matan):
+        dx = self.x - x1 + (width - 1) / 2
+        dy = self.y - y1 + (height - 1) / 2
+        if 0 <= dx <= width and 0 <= dy < height:
+            im = self.im
+            image_rect = im.get_rect(topleft=(d * dx, d * dy))
+            sc.blit(im, image_rect)
+        if abs(self.x - x1) <= 1 and abs(self.y - y1) <= 1:
+            if matan < 3:
+                im = self.im1
+            else:
+                im = self.im2
+            image_rect = im.get_rect(topleft=(d * (dx + 0.4), d * (dy - 5)))
+            sc.blit(im, image_rect)
+
 class Background():
     def draw(self, sc, pix, x, y, width, height):
         dx = (width - 1) / 2
@@ -208,6 +223,6 @@ class Background():
                 elif pix[x + i - dx, y + j - dy][:-1] == WHITE:
                     image_rect = back3.get_rect(topleft=(d * i, d * j))
                     sc.blit(back3, image_rect)
-                elif pix[x + i - dx, y + j - dy][:-1] == GREEN:
+                elif (pix[x + i - dx, y + j - dy][:-1] == BLUE) or (pix[x + i - dx, y + j - dy][:-1] == GREEN):
                     image_rect = back3.get_rect(topleft=(d * i, d * j))
                     sc.blit(back3, image_rect)
