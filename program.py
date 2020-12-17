@@ -47,7 +47,7 @@ e2 = pause_button.h
 pause_button.x += (width * d // 2 - e1) // 2
 pause_button.y += (100 - e2) // 2
 
-matans = [Matan(79,33), Matan(131, 37), Matan(115, 114)]
+matans = [Matan(79, 33), Matan(131, 37), Matan(115, 114)]
 # возможно пригодится для первого уровня: matans = [Matan(27, 75), Matan(25, 22), Matan(89, 43)]
 npc=Npc(66, 70)
 # возможно пригодится для первого уровня: npc=Npc(45,45)
@@ -76,6 +76,7 @@ def game(player):
             Rat(0, 0.2, 0, 2, 114, 79)]
     sc = 0
     sc1 = 0
+    sc2 = 0
     time = 0
     global exit_button, pause_button, monets
     finished = False
@@ -106,7 +107,7 @@ def game(player):
                 sc1 += 1
         for book in ivanovnics:
             if book.check(hero.x, hero.y):
-                sc += 10
+                sc2 += 1
                 ivanovnics.remove(book)
 
         screen.fill(WHITE)
@@ -126,20 +127,20 @@ def game(player):
         screen.blit(h14, (340, 630))
         screen.blit(f1.render(str(sc1) + '/3', 1, BLACK), (500, 640))
         screen.blit(h20, (445, 630))
+        screen.blit(f1.render(str(sc2) + '/3', 1, BLACK), (500, 640))
+        screen.blit(h20, (445, 630))
         hero.draw(screen, width, height)
-        npc.draw(screen, hero.x, hero.y, width, height, sc1)
+        npc.draw(screen, hero.x, hero.y, width, height, sc1, sc2)
         pygame.display.update()
         clock.tick(FPS)
         if not paused:
             keys = pygame.key.get_pressed()
             hero.move(keys, FPS, pix, background)
     inp = open('players.txt', 'a')
-    inp.write(player + ' ' + str(sc) + ' ' + str(sc1) + '\n')
+    inp.write(player + ' ' + str(sc) + ' ' + str(sc1) + str(sc2) + '\n')
     inp.close
     for moneta in monets:
         moneta.recovery()
-    for book in ivanovnics:
-        book.recovery()
 
 
 def start_menu():

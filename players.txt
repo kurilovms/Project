@@ -15,3 +15,5 @@ Rare 130 0
 yaml 24 0
 tafe 457 1
 kok 113 0
+igly 327 2
+hate 666 1

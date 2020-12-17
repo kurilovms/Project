@@ -17,7 +17,7 @@ COLORS = [RED, BLUE, YELLOW, GREEN, MAGENTA, CYAN, WHITE]
 
 from download import back1, back2, back3
 from download import h1, h2, h3, h4, h5, h6, h7, h8, h9, h10, h11, h12, h13, h14, h15, h16, h17, h18, h19,\
-h20, h21, h22, h23, ivanovnik
+h20, h21, h22, h23, ivanovnik, ivanov, kiselev, karasev, kojevnikov, arutunov, survive
 
 
 class Hero():
@@ -112,14 +112,6 @@ class Moneta():
         self.x = self.x0
         self.y = self.y0
 
-class Ivanovnik(Moneta):
-    def __init__(self, x=0, y=0):
-        self.x = x
-        self.y = y
-        self.x0 = x
-        self.y0 = y
-        self.im = ivanovnik
-
 class Rat():
     def __init__(self, spdx=0, spdy=0, dx=0, dy=0, x0=0, y0=0):
         self.x = x0
@@ -184,6 +176,12 @@ class Matan():
             self.y = -1
             return True
 
+class Ivanovnik(Matan):
+    def __init__(self, x=0, y=0):
+        self.x = x
+        self.y = y
+        self.im = ivanovnik
+
 class Npc():
 
     def __init__(self, x=0, y=0):
@@ -193,7 +191,7 @@ class Npc():
         self.im1 = h22
         self.im2 = h23
 
-    def draw(self, sc, x1, y1, width, height, matan):
+    def draw(self, sc, x1, y1, width, height, matan, ivanovnik):
         dx = self.x - x1 + (width - 1) / 2
         dy = self.y - y1 + (height - 1) / 2
         if 0 <= dx <= width and 0 <= dy < height:
@@ -203,10 +201,21 @@ class Npc():
         if abs(self.x - x1) <= 1 and abs(self.y - y1) <= 1:
             if matan < 3:
                 im = self.im1
-            else:
-                im = self.im2
+            elif im = self.im2
             image_rect = im.get_rect(topleft=(d * (dx + 0.4), d * (dy - 5)))
             sc.blit(im, image_rect)
+            if ivanovnik >= 10:
+                end = ivanov
+            elif ivanovnik == 8 or ivanovnik == 9:
+                end = kiselev
+            elif ivanovnik == 6 or ivanovnik == 7:
+                end = karasev
+            elif ivanovnik == 4 or ivanovnik == 5:
+                end = kojevnikov
+            elif ivanovnik == 2 or ivanovnik == 3:
+                end = arutunov
+            else:
+                end = survive
 
 class Background():
     def draw(self, sc, pix, x, y, width, height):
