@@ -248,7 +248,7 @@ def win_menu(s, s1, s2):
         screen.blit(h14, (50, 150))
         screen.blit(f1.render(str(s1) + '/3', 1, BLACK), (100, 200))
         screen.blit(h20, (50, 200))
-        screen.blit(f1.render(str(s2) + '/3', 1, BLACK), (100, 250))
+        screen.blit(f1.render(str(s2) + '/11', 1, BLACK), (100, 250))
         screen.blit(ivanovnik, (50, 250))
         ok_button.draw()
         pygame.display.update()
