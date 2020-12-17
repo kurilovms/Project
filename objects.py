@@ -17,7 +17,7 @@ COLORS = [RED, BLUE, YELLOW, GREEN, MAGENTA, CYAN, WHITE]
 
 from download import back1, back2, back3
 from download import h1, h2, h3, h4, h5, h6, h7, h8, h9, h10, h11, h12, h13, h14, h15, h16, h17, h18, h19,\
-h20, h21, h22, h23, ivanovnik, ivanov, kiselev, karasev, kojevnikov, arutunov, survive
+h20, h21, h22, h23, ivanovnik
 
 
 class Hero():
@@ -85,6 +85,7 @@ class Hero():
         image_rect = im.get_rect(topleft=(d * dx, d * dy))
         sc.blit(im, image_rect)
 
+
 class Moneta():
     def __init__(self, x=0, y=0):
         self.x = x
@@ -112,6 +113,7 @@ class Moneta():
         self.x = self.x0
         self.y = self.y0
 
+
 class Rat():
     def __init__(self, spdx=0, spdy=0, dx=0, dy=0, x0=0, y0=0):
         self.x = x0
@@ -130,9 +132,9 @@ class Rat():
     def calculate(self):
         self.x+= self.spdx
         self.y+= self.spdy
-        if abs(self.x - self.x0) >= self.dx:
+        if abs(self.x - self.x0) > self.dx:
             self.spdx = -self.spdx
-        if abs(self.y - self.y0) >= self.dy:
+        if abs(self.y - self.y0) > self.dy:
             self.spdy = -self.spdy
 
     def draw(self, sc, x1, y1, width, height):
@@ -156,10 +158,13 @@ class Rat():
         if abs(self.x - x1) < 1 and abs(self.y - y1) < 1:
             return True
 
+
 class Matan():
     def __init__(self, x=0, y=0):
         self.x = x
         self.y = y
+        self.x0 = x
+        self.y0 = y
         self.im = h19
 
     def draw(self, sc, x1, y1, width, height):
@@ -176,11 +181,29 @@ class Matan():
             self.y = -1
             return True
 
+    def recovery(self):
+        self.x = self.x0
+        self.y = self.y0
+
+
 class Ivanovnik(Matan):
     def __init__(self, x=0, y=0):
         self.x = x
         self.y = y
+        self.x0 = x
+        self.y0 = y
         self.im = ivanovnik
+
+    def check(self, x1, y1):
+        if self.x == x1 and self.y == y1:
+            self.x = -1
+            self.y = -1
+            return True
+
+    def recovery(self):
+        self.x = self.x0
+        self.y = self.y0
+
 
 class Npc():
 
@@ -201,21 +224,15 @@ class Npc():
         if abs(self.x - x1) <= 1 and abs(self.y - y1) <= 1:
             if matan < 3:
                 im = self.im1
-            elif im = self.im2
+            else:
+                im = self.im2
             image_rect = im.get_rect(topleft=(d * (dx + 0.4), d * (dy - 5)))
             sc.blit(im, image_rect)
-            if ivanovnik >= 10:
-                end = ivanov
-            elif ivanovnik == 8 or ivanovnik == 9:
-                end = kiselev
-            elif ivanovnik == 6 or ivanovnik == 7:
-                end = karasev
-            elif ivanovnik == 4 or ivanovnik == 5:
-                end = kojevnikov
-            elif ivanovnik == 2 or ivanovnik == 3:
-                end = arutunov
-            else:
-                end = survive
+    
+    def check(self, x1, y1, matan):
+        if abs(self.x - x1) <= 1 and abs(self.y - y1) <= 1 and matan == 3:
+            return True
+
 
 class Background():
     def draw(self, sc, pix, x, y, width, height):

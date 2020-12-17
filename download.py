@@ -9,6 +9,8 @@ back2 = pygame.transform.scale(back2, (d, d))
 back3 = pygame.image.load("back3.png")
 back3 = pygame.transform.scale(back3, (d, d))
 dorm = pygame.image.load("dormitory.jpg")
+ratat = pygame.image.load("ratat.jpg")
+ded = pygame.image.load("ded.jpg")
 
 h1 = pygame.image.load("player/1.png")
 h1 = pygame.transform.scale(h1, (d, d))
@@ -102,32 +104,10 @@ h23 = pygame.image.load("23.png")
 h23 = pygame.transform.scale(h23, (int(6*d), int(5*d)))
 h23.set_colorkey(WHITE)
 
+h24 = pygame.image.load('ivanovnik.png')
+h24 = pygame.transform.scale(h24, (d, d))
+h24.set_colorkey(WHITE)
+
 ivanovnik = pygame.image.load('ivanovnik.png')
 ivanovnik = pygame.transform.scale(ivanovnik, (d, d))
 ivanovnik.set_colorkey(WHITE)
-
-# Endings
-
-ivanov = pygame.image.load("Endings/Ivanov.jpeg")
-ivanov = pygame.transform.scale(ivanov, 600, 800)
-ivanov.set_colorkey(WHITE)
-
-kiselev = pygame.image.load("Endings/Kiselev.jpg")
-kiselev = pygame.transform.scale(kiselev, 600, 800)
-kiselev.set_colorkey(WHITE)
-
-karasev = pygame.image.load("Endings/Karasev.jpg")
-karasev = pygame.transform.scale(karasev, 600, 800)
-karasev.set_colorkey(WHITE)
-
-kojevnikov = pygame.image.load("Endings/Kojevnikov.jpg")
-kojevnikov = pygame.transform.scale(kojevnikov, 600, 800)
-kojevnikov.set_colorkey(WHITE)
-
-arutunov = pygame.image.load("Endings/Arutunov.jpg")
-arutunov = pygame.transform.scale(arutunov, 600, 800)
-arutunov.set_colorkey(WHITE)
-
-survive = pygame.image.load("Endings/Survive.jpg")
-survive = pygame.transform.scale(survive, 600, 800)
-survive.set_colorkey(WHITE)

@@ -1,12 +1,13 @@
 import pygame
 import sys
+import tkinter as tk
 from pygame.draw import *
 from pygame.locals import *
 from PIL import Image
-from visual import *
+from visual import * 
 
-from objects import Hero, Background, d, WHITE, BLACK, GREEN, BLUE, Moneta, h14, Rat, Matan, h20, Npc, Ivanovnik
-from download import dorm
+from objects import Hero, Background, d, WHITE, BLACK, GREEN, BLUE, Moneta, Rat, Matan, Npc, Ivanovnik
+from download import dorm, ratat, ded, h14, h20, h24
 
 pygame.init()
 FPS = 30
@@ -20,7 +21,6 @@ l1, l2 = image.size
 screen = pygame.display.set_mode((600, 800))
 pygame.display.update()
 clock = pygame.time.Clock()
-font = pygame.font.Font(None, 72)
 f1 = pygame.font.Font(None, 36)
 background = Background()
 monets = []
@@ -32,25 +32,21 @@ for i in range(l1):
         if pix[i, j][:-1] == BLUE:
             ivanovnics.append(Ivanovnik(i, j))
 
-# возможно пригодится для первого уровня: rats = [Rat(0, 0.4, 4, 4, 52, 60)]
-
 exit_button = Button(0, height*d+10, 'Back to menu')
 pause_button = Button(width*d//2, height*d+10, 'Pause')
 exit_button.draw()
 pause_button.draw()
 e1 = exit_button.w
 e2 = exit_button.h
-exit_button.x += (width * d // 2 - e1) // 2
+exit_button.x += -50 + (width * d // 2 - e1) // 2
 exit_button.y += (100 - e2) // 2
 e1 = pause_button.w
 e2 = pause_button.h
-pause_button.x += (width * d // 2 - e1) // 2
+pause_button.x += 50 + (width * d // 2 - e1) // 2
 pause_button.y += (100 - e2) // 2
 
 matans = [Matan(79, 33), Matan(131, 37), Matan(115, 114)]
-# возможно пригодится для первого уровня: matans = [Matan(27, 75), Matan(25, 22), Matan(89, 43)]
 npc=Npc(66, 70)
-# возможно пригодится для первого уровня: npc=Npc(45,45)
 
 def game(player):
     if player == '':
@@ -77,8 +73,8 @@ def game(player):
     sc = 0
     sc1 = 0
     sc2 = 0
-    time = 0
-    global exit_button, pause_button, monets
+    trigger = False
+    global exit_button, pause_button, monets, ivanovnics, matans
     finished = False
     paused = False
     while not finished:
@@ -102,18 +98,19 @@ def game(player):
         for rat in rats:
             if rat.check(hero.x, hero.y):
                 finished = True
+                die_menu(sc, sc1, sc2)
         for matan in matans:
             if matan.check(hero.x, hero.y) == True:
                 sc1 += 1
         for book in ivanovnics:
             if book.check(hero.x, hero.y):
                 sc2 += 1
-                ivanovnics.remove(book)
+        if npc.check(hero.x, hero.y, sc1):
+            trigger = True
 
         screen.fill(WHITE)
         background.draw(screen, pix, hero.x, hero.y, width, height)
         for rat in rats:
-            rat.calculate()
             rat.draw(screen, hero.x, hero.y, width, height)
         for moneta in monets:
             moneta.draw(screen, hero.x, hero.y, width, height)
@@ -123,29 +120,39 @@ def game(player):
             book.draw(screen, hero.x, hero.y, width, height)
         pause_button.draw()
         exit_button.draw()
-        screen.blit(f1.render(str(sc), 1, BLACK), (400, 640))
-        screen.blit(h14, (340, 630))
-        screen.blit(f1.render(str(sc1) + '/3', 1, BLACK), (500, 640))
-        screen.blit(h20, (445, 630))
-        screen.blit(f1.render(str(sc2) + '/3', 1, BLACK), (500, 640))
-        screen.blit(h20, (445, 630))
+        screen.blit(f1.render(str(sc), 1, BLACK), (350, 640))
+        screen.blit(h14, (290, 630))
+        screen.blit(f1.render(str(sc1) + '/3', 1, BLACK), (450, 640))
+        screen.blit(h20, (395, 630))
+        screen.blit(f1.render(str(sc2) + '/3', 1, BLACK), (550, 640))
+        screen.blit(h24, (495, 630))
         hero.draw(screen, width, height)
         npc.draw(screen, hero.x, hero.y, width, height, sc1, sc2)
         pygame.display.update()
         clock.tick(FPS)
+        for rat in rats:
+            rat.calculate()
         if not paused:
             keys = pygame.key.get_pressed()
             hero.move(keys, FPS, pix, background)
+        if trigger:
+            finished = True
+            pygame.time.wait(1000)
+            win_menu(sc, sc1, sc2)
     inp = open('players.txt', 'a')
-    inp.write(player + ' ' + str(sc) + ' ' + str(sc1) + str(sc2) + '\n')
+    inp.write(player + ' ' + str(sc) + ' ' + str(sc1)+ ' ' + str(sc2) + '\n')
     inp.close
     for moneta in monets:
         moneta.recovery()
+    for matan in matans:
+        matan.recovery()
+    for iv in ivanovnics:
+        iv.recovery()
 
 
 def start_menu():
     w = 600
-    l = 800
+    l = 600
     screen = pygame.display.set_mode((w, l))
     global dorm
     dorm = pygame.transform.scale(dorm, (w, l))
@@ -181,6 +188,76 @@ def start_menu():
         screen.fill(WHITE)
 
 
+def die_menu(s, s1, s2):
+    w = 300
+    l = 400
+    global ratat
+    ratat = pygame.transform.scale(ratat, (w, l))
+    screen = pygame.display.set_mode((w, l))
+    f1 = pygame.font.Font(None, 40)
+    text1 = f1.render('ВЫ УМЕРЛИ!', True, BLACK)
+    text2 = f1.render('Ваш счет:',True, BLACK)
+    ok_button = Button(50, 320, 'OK')
+    back = False
+    while not back:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                raise sys.exit()
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                if ok_button.check():
+                    back = True
+        clock.tick(FPS)
+        ratat_rect = ratat.get_rect(topleft=(0, 0))
+        screen.blit(ratat, ratat_rect)
+        screen.blit(text1, (50, 50))
+        screen.blit(text2, (50, 100))
+        screen.blit(f1.render(str(s), 1, BLACK), (100, 150))
+        screen.blit(h14, (50, 150))
+        screen.blit(f1.render(str(s1) + '/3', 1, BLACK), (100, 200))
+        screen.blit(h20, (50, 200))
+        screen.blit(f1.render(str(s2) + '/3', 1, BLACK), (100, 250))
+        screen.blit(h24, (50, 250))
+        ok_button.draw()
+        pygame.display.update()
+        screen.fill(WHITE)
+
+
+def win_menu(s, s1, s2):
+    w = 300
+    l = 400
+    global ded
+    ded = pygame.transform.scale(ded, (w, l))
+    screen = pygame.display.set_mode((w, l))
+    f1 = pygame.font.Font(None, 40)
+    text1 = f1.render('ВЫ ВЫЖИЛИ!', True, BLACK)
+    text2 = f1.render('Ваш счет:',True, BLACK)
+    ok_button = Button(50, 320, 'OK')
+    back = False
+    while not back:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                raise sys.exit()
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                if ok_button.check():
+                    back = True
+        clock.tick(FPS)
+        ded_rect = ded.get_rect(topleft=(0, 0))
+        screen.blit(ded, ded_rect)
+        screen.blit(text1, (50, 50))
+        screen.blit(text2, (50, 100))
+        screen.blit(f1.render(str(s), 1, BLACK), (100, 150))
+        screen.blit(h14, (50, 150))
+        screen.blit(f1.render(str(s1) + '/3', 1, BLACK), (100, 200))
+        screen.blit(h20, (50, 200))
+        screen.blit(f1.render(str(s2) + '/3', 1, BLACK), (100, 250))
+        screen.blit(h24, (50, 250))
+        ok_button.draw()
+        pygame.display.update()
+        screen.fill(WHITE)
+
+
 def name_menu():
     w = 300
     l = 300
@@ -211,6 +288,7 @@ def name_menu():
         pygame.display.update()
         screen.fill(WHITE)
 
+
 def best_scores():
     inp = open('players.txt', 'r')
     if inp.read() != '':
@@ -221,23 +299,29 @@ def best_scores():
                 name = B[0]
                 coins = int(B[1])
                 tasks = int(B[2])
-                res.append([name, coins, tasks])
+                ivs = int(B[3])
+                res.append([name, coins, tasks, ivs])
         res = sorted(res, key=lambda i: -i[1])
         with open("players.txt", "w") as file:
             for i in res:
-                file.write(i[0]+' '+str(i[1])+' '+str(i[2])+'\n')
+                file.write(i[0]+' '+str(i[1])+' '+str(i[2])+' '+str(i[3])+'\n')
+    else:
+        res = []
+    inp.close()
     res = res[:10]
     root_scores = tk.Tk()
     root_scores.title("Лучшие результаты")
-    root_scores.geometry('600x600')
+    root_scores.geometry('350x350')
     back = tk.Button(text='Back to menu', command=lambda: root_scores.destroy(), width=10, font='28')
-    back.grid(row=0, column=0, columnspan=3, pady=5)
+    back.grid(row=0, column=0, columnspan=4, pady=5)
     head_name = tk.Label(root_scores, text=' name ', font='28')
     head_name.grid(row=1, column=0)
     head_score = tk.Label(root_scores, text=' coins ', font='28')
     head_score.grid(row=1, column=1)
     head_shots = tk.Label(root_scores, text=' tasks ', font='28')
     head_shots.grid(row=1, column=2)
+    head_shots = tk.Label(root_scores, text=' books ', font='28')
+    head_shots.grid(row=1, column=3)
     for i, s in enumerate(res):
         bar_0 = tk.Label(root_scores, text=s[0], font='28')
         bar_0.grid(row=2+i, column=0)
@@ -245,6 +329,8 @@ def best_scores():
         bar_1.grid(row=2+i, column=1)
         bar_2 = tk.Label(root_scores, text=s[2], font='28')
         bar_2.grid(row=2+i, column=2)
+        bar_3 = tk.Label(root_scores, text=s[3], font='28')
+        bar_3.grid(row=2+i, column=3)
     root_scores.mainloop()
 
 
